@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Chivo+Mono:ital,wght@1,100;1,900&display=swap');
+
+* {
+    font-family: 'Chivo Mono', monospace;
+}
+
+.container {
+    position: absolute;
+    top: 5vh;
+    right: 0;
+    width: 10vw;
+    height: 5vw;
+    font-size: 200%;
+    text-align: center;
+    background-color: #000000;
+    color: #ffffff;
+}
+
+
+
+.hidden {
+    display: none;
+}
+
+.shown {
+    display: block;
+}

@@ -16,3 +16,8 @@ client_scripts {
 server_scripts {
     'server/*.lua'
 }
+
+ui_page 'html/index.html'
+files {
+    'html/*'
+}

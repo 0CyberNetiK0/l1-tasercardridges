@@ -4,6 +4,7 @@ local CardridgesLeft = Config.max
 local TaserModel = GetHashKey("WEAPON_STUNGUN")
 
 
+
 -- Make a usable command
 if Config.type == "command" then
     RegisterCommand(Config.command, function()
@@ -57,8 +58,12 @@ function RefillProgressbar()
             disableCombat = true
         }, {}, {}, {}, function() -- Done
             SafeNotify("Taser Reloaded.")
-            CardridgesLeft = Config.max
             TriggerServerEvent("qb-tasercart:server:removeCardridge")
+            CardridgesLeft = Config.max
+            SendNUIMessage({
+                type = 'update',
+                amount = CardridgesLeft
+            })
         end, function() -- Cancel
             SafeNotify("Taser Reload Cancelled.", 1000)
         end)
@@ -75,6 +80,10 @@ function RefillNotify()
             SafeNotify("Taser Reloaded.")
             TriggerServerEvent("qb-tasercart:server:removeCardridge")
             CardridgesLeft = Config.max
+            SendNUIMessage({
+                type = 'update',
+                amount = CardridgesLeft
+            })
         else
             SafeNotify("You have no cardridges?", 1000)
         end
@@ -87,6 +96,12 @@ CreateThread(function()
         Wait(0)
         local ped = PlayerPedId()
         local weapon = GetSelectedPedWeapon(ped)
+        
+        SendNUIMessage({
+            type = 'set',
+            bool = weapon == TaserModel
+        })
+
         if weapon == TaserModel then
 
             if CardridgesLeft <= 0 then
@@ -98,8 +113,22 @@ CreateThread(function()
             end
 
             if IsPedShooting(ped) and CardridgesLeft > 0 then
+                SendNUIMessage({
+                    type = 'update',
+                    amount = CardridgesLeft - 1
+                })
                 CardridgesLeft = CardridgesLeft - 1
             end
         end
     end
+end)
+
+
+-- update cardridges left
+CreateThread(function () 
+    Wait(3000)
+    SendNUIMessage({
+        type = 'update',
+        amount = Config.max
+    })
 end)
